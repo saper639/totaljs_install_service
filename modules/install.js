@@ -149,8 +149,8 @@ NEWSCHEMA('Install').make(function(schema) {
     db = model.db;
     mail = model.mail;
     var config = "\
-name                            : Monitoring Mobile Object\n\
-author                          : FreeGate\n\
+name                            : Example\n\
+author                          : author\n\
 version                         : 1.01\n\
 // Please do not change the data\n\
 database                        : mysql://{0}{1}@{2}:{3}/{4}\n\
