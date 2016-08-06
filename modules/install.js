@@ -2,7 +2,6 @@
 exports.version = "1.0";
 var mysql = require('mysql');
 var fs = require('fs');
-//var readline = require('readline');
 
 exports.check = function(callback) {
   F.path.exists(F.path.root()+'/config', function(exists,size,isFile) {     
@@ -25,22 +24,22 @@ exports.check = function(callback) {
     	    self.layout('install');	    
     	    self.view();	    
         }
-        //проверка соеднения с БД
+        //db connection check
         function check_db() {
         	var self = this;        	        	
         	self.$workflow('check_db', self.query, self.callback());   				
         }
-        //созадать БД
+        //create db
         function create_db() {
           var self = this;                    
           self.$workflow('create_db', self.query, self.callback());          
         }
-         //импортировани БД
+         //import db
         function import_db() {
           var self = this;                    
           self.$workflow('import_db', self.query, self.callback());          
         }
-        //сохранить конфиг
+        //save config
         function save_config() {          
           var self = this;                
           self.body.$save(self, self.callback());          
@@ -54,7 +53,7 @@ NEWSCHEMA('Install').make(function(schema) {
   schema.define('db',    Object);
   schema.define('mail',    Object);
 	schema.setResource('errors');    
-  //проверка доступности БД
+       //db connection check
 	schema.addWorkflow('check_db', function (error, model, query, callback) { 		
 		var con = mysql.createConnection({
   			host     : query.host,
@@ -73,7 +72,7 @@ NEWSCHEMA('Install').make(function(schema) {
 	})
 
   schema.addWorkflow('create_db', function (error, model, query, callback) {     
-    //нужно создать новую БД        
+    //need create new db        
     if (query.create && query.create.parseBoolean()) {            
       var con = mysql.createConnection({
           host     : query.host,
@@ -98,7 +97,7 @@ NEWSCHEMA('Install').make(function(schema) {
       });
 
       con.end();   
-    } //пользвоатель говорит бд уже создана, проверим его
+    } //user say db create, chech him
       else {
         var con = mysql.createConnection({
           host     : query.host,
@@ -117,7 +116,7 @@ NEWSCHEMA('Install').make(function(schema) {
         });   
     }      
   })	
-
+  //import db (only MYSQL)
   schema.addWorkflow('import_db', function (error, model, query, callback) {     
     async = []; 
     var con = mysql.createConnection({
@@ -144,7 +143,7 @@ NEWSCHEMA('Install').make(function(schema) {
       return callback(SUCCESS(true, RESOURCE('mess_install_bd')));      
     });             
   });   
-
+  //create config
   schema.setSave(function (error, model, self, callback) {
     db = model.db;
     mail = model.mail;
