@@ -1,4 +1,4 @@
-﻿exports.name = "install";
+exports.name = "install";
 exports.version = "1.0";
 var mysql = require('mysql');
 var fs = require('fs');

@@ -1,4 +1,4 @@
-﻿var Settings = MODEL('Settings');
+var Settings = MODEL('Settings');
 F.on('load', function() {
         //prepare script for browser    
 	Settings.scripts();
